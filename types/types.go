@@ -46,12 +46,15 @@ type PriceDisplay struct {
 	HIGH24HOUR      string `json:"HIGH24HOUR"`
 	PRICE           string `json:"PRICE"`
 
+	FROMSYMBOL string `json:"FROMSYMBOL"` // BTC
+	TOSYMBOL   string `json:"TOSYMBOL"`   // USD
+
 	LASTUPDATE string `json:"LASTUPDATE"`
 	SUPPLY     string `json:"SUPPLY"`
 	MKTCAP     string `json:"MKTCAP"`
 }
 
 type PricesResponse struct {
-	RAW     map[string]PriceRaw     `json:"RAW"`
-	DISPLAY map[string]PriceDisplay `json:"DISPLAY"`
+	RAW     map[string]map[string]PriceRaw     `json:"RAW"`
+	DISPLAY map[string]map[string]PriceDisplay `json:"DISPLAY"`
 }
