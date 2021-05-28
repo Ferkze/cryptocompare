@@ -14,7 +14,7 @@ type LastPriceModel struct {
 	HIGH24HOUR        float64 `json:"HIGH24HOUR"`
 	PRICE             float64 `json:"PRICE"`
 	LASTUPDATE        int64   `json:"LASTUPDATE"`
-	SUPPLY            int64   `json:"SUPPLY"`
+	SUPPLY            float64 `json:"SUPPLY"`
 	MKTCAP            float64 `json:"MKTCAP"`
 }
 
@@ -28,7 +28,7 @@ type PriceRaw struct {
 	HIGH24HOUR      float64 `json:"HIGH24HOUR"`
 	PRICE           float64 `json:"PRICE"`
 	LASTUPDATE      int64   `json:"LASTUPDATE"`
-	SUPPLY          int64   `json:"SUPPLY"`
+	SUPPLY          float64 `json:"SUPPLY"`
 	MKTCAP          float64 `json:"MKTCAP"`
 }
 type PriceDisplay struct {
