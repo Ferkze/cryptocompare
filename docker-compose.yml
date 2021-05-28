@@ -1,0 +1,43 @@
+version: '2'
+volumes:
+  data:
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_DSN=root:password@tcp(db_mysql:3306)/cryptodev?charset=utf8mb4&parseTime=True&loc=Local
+      - MYSQL_DATABASE=users_db
+      - fsyms=BTC,ETH
+      - tsyms=USD,GBP
+      - port=5000
+    networks: 
+      - default-network
+    depends_on:
+      - db_mysql
+      
+  db_mysql:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=users_db
+    networks: 
+      - default-network
+
+  db_ui:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks: 
+      - default-network
+
+networks: 
+  default-network:
+    driver: bridge
