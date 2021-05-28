@@ -7,6 +7,7 @@ import (
 	"github.com/ferkze/cryptocompare/types"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type LastPriceModel struct {
@@ -49,9 +50,14 @@ func (r *mysqlCrytoRepository) GetLastPrice(fsyms, tsyms []string) ([]types.Last
 		Find(&models)
 	return models, result.Error
 }
-func (r *mysqlCrytoRepository) GetSymbols() ([]types.SymbolPair, error) {
-	return nil, nil
+func (r *mysqlCrytoRepository) GetSymbols() ([]types.LastPriceModel, error) {
+	var models []types.LastPriceModel
+	result := r.db.Select("FROMSYMBOL", "TOSYMBOL").Find(&models)
+	return models, result.Error
 }
 func (r *mysqlCrytoRepository) BulkUpdateLastPrices(models []types.LastPriceModel) error {
-	return nil
+	result := r.db.Clauses(clause.OnConflict{
+		UpdateAll: true,
+	}).Create(&models)
+	return result.Error
 }

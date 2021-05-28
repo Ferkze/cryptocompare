@@ -1,15 +1,10 @@
 package types
 
-type SymbolPair struct {
-	FROMSYMBOL string `json:"FROMSYMBOL"` // BTC
-	TOSYMBOL   string `json:"TOSYMBOL"`   // USD
-}
-
 type LastPriceModel struct {
-	FROMSYMBOL        string  `json:"FROMSYMBOL"`        // BTC
-	TOSYMBOL          string  `json:"TOSYMBOL"`          // USD
-	FROMSYMBOLDISPLAY string  `json:"FROMSYMBOLDISPLAY"` // Ƀ
-	TOSYMBOLDISPLAY   string  `json:"TOSYMBOLDISPLAY"`   // $
+	FROMSYMBOL        string  `json:"FROMSYMBOL" gorm:"primaryKey; not null"` // BTC
+	TOSYMBOL          string  `json:"TOSYMBOL" gorm:"primaryKey; not null"`   // USD
+	FROMSYMBOLDISPLAY string  `json:"FROMSYMBOLDISPLAY"`                      // Ƀ
+	TOSYMBOLDISPLAY   string  `json:"TOSYMBOLDISPLAY"`                        // $
 	CHANGE24HOUR      float64 `json:"CHANGE24HOUR"`
 	CHANGEPCT24HOUR   float64 `json:"CHANGEPCT24HOUR"`
 	OPEN24HOUR        float64 `json:"OPEN24HOUR"`

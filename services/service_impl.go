@@ -35,7 +35,12 @@ func (s *cryptoServiceImpl) GetLastSymbolsPrice(fsyms, tsyms []string) (prices t
 }
 
 func (s *cryptoServiceImpl) RefreshLastSymbolsPrices(fsyms, tsyms []string) error {
-	return nil
+	prices, err := s.requestLastSymbolsPrice(fsyms, tsyms)
+	if err != nil {
+		return err
+	}
+	models := s.getLastPriceModels(prices)
+	return s.repo.BulkUpdateLastPrices(models)
 }
 
 func (s *cryptoServiceImpl) requestLastSymbolsPrice(fsyms, tsyms []string) (types.PricesResponse, error) {
@@ -92,4 +97,31 @@ func (s *cryptoServiceImpl) transformCryptoModel(models []types.LastPriceModel) 
 		}
 	}
 	return prices
+}
+
+func (s *cryptoServiceImpl) getLastPriceModels(prices types.PricesResponse) []types.LastPriceModel {
+	models := make([]types.LastPriceModel, 0)
+	for fsym, pair := range prices.RAW {
+		for tsym, rawdata := range pair {
+			model := types.LastPriceModel{
+				FROMSYMBOL: fsym,
+				TOSYMBOL: tsym,
+				FROMSYMBOLDISPLAY: prices.DISPLAY[fsym][tsym].FROMSYMBOL,
+				TOSYMBOLDISPLAY: prices.DISPLAY[fsym][tsym].TOSYMBOL,
+				CHANGE24HOUR: rawdata.CHANGE24HOUR,
+				CHANGEPCT24HOUR: rawdata.CHANGEPCT24HOUR,
+				OPEN24HOUR: rawdata.OPEN24HOUR,
+				VOLUME24HOUR: rawdata.VOLUME24HOUR,
+				VOLUME24HOURTO: rawdata.VOLUME24HOURTO,
+				LOW24HOUR: rawdata.LOW24HOUR,
+				HIGH24HOUR: rawdata.HIGH24HOUR,
+				PRICE: rawdata.PRICE,
+				LASTUPDATE: rawdata.LASTUPDATE,
+				SUPPLY: rawdata.SUPPLY,
+				MKTCAP: rawdata.MKTCAP,
+			}
+			models = append(models, model)
+		}
+	}
+	return models
 }
