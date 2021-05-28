@@ -18,3 +18,7 @@ The price is always retrieved from cryptocompare.com when it's available. Otherw
 A cron scheduler runs every minute refreshing the pairs in MySQL DB.
 
 The refreshed pairs are parameters provided in the server environment.
+
+## Execution
+
+	docker-compose up -d --build
